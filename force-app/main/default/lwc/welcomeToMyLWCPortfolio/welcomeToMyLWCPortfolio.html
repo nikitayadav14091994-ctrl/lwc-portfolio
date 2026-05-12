@@ -1,0 +1,18 @@
+<template>
+  <lightning-card>
+    <div class="slds-m-around_medium">
+
+      <p>Hello, <strong>{name}</strong>! Welcome to my Salesforce LWC journey.</p>
+      </br>
+      <lightning-layout multiple-rows>
+        <lightning-layout-item size="2">
+            <lightning-input
+              label="Enter your name"
+              value={name}
+              onchange={handleChange}>
+            </lightning-input>
+        </lightning-layout-item>
+      </lightning-layout>
+    </div>
+  </lightning-card>
+</template>
