@@ -1,0 +1,176 @@
+<template>
+    <lightning-card title="Salesforce Developer Career Navigator"
+                    icon-name="standard:journey">
+        <div class="slds-var-m-around_medium">
+
+            <!-- ── LEVEL SELECTOR BUTTONS ──────────────────────────
+                 data-level stores which level each button represents
+                 event.target.dataset.level reads it back in JS       -->
+            <div class="slds-grid slds-gutters_x-small slds-var-m-bottom_medium">
+                <div class="slds-col">
+                    <lightning-button label="🌱 Beginner"
+                        variant={beginnerVariant}
+                        data-level="beginner"
+                        onclick={selectLevel}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button label="💻 Developer"
+                        variant={developerVariant}
+                        data-level="developer"
+                        onclick={selectLevel}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button label="🚀 Senior"
+                        variant={seniorVariant}
+                        data-level="senior"
+                        onclick={selectLevel}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button label="🏗️ Architect"
+                        variant={architectVariant}
+                        data-level="architect"
+                        onclick={selectLevel}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- ── lwc:if / lwc:elseif / lwc:else ─────────────────
+                 Shows a differently coloured banner per level
+                 Only ONE of these 4 blocks renders at any time      -->
+            <template lwc:if={isBeginnerSelected}>
+                <div class="level-banner banner-beginner">
+                    <span class="level-emoji">🌱</span>
+                    <div>
+                        <p class="level-title">Beginner</p>
+                        <p class="level-meta">{currentLevel.experience} · {currentLevel.salary}</p>
+                        <p class="slds-text-body_regular">
+                            {currentLevel.description}
+                        </p>
+                    </div>
+                </div>
+           </template>
+
+            <template lwc:elseif={isDeveloperSelected}>
+                <div class="level-banner banner-developer">
+                    <span class="level-emoji">💻</span>
+                    <div>
+                        <p class="level-title">Developer</p>
+                        <p class="level-meta">{currentLevel.experience} · {currentLevel.salary}</p>
+                        <p class="slds-text-body_regular">
+                            {currentLevel.description}
+                        </p>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:elseif={isSeniorSelected}>
+                <div class="level-banner banner-senior">
+                    <span class="level-emoji">🚀</span>
+                    <div>
+                        <p class="level-title">Senior Developer</p>
+                        <p class="level-meta">{currentLevel.experience} · {currentLevel.salary}</p>
+                        <p class="slds-text-body_regular">
+                            {currentLevel.description}
+                        </p>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="level-banner banner-architect">
+                    <span class="level-emoji">🏗️</span>
+                    <div>
+                        <p class="level-title">Architect</p>
+                        <p class="level-meta">{currentLevel.experience} · {currentLevel.salary}</p>
+                        <p class="slds-text-body_regular">
+                            {currentLevel.description}
+                        </p>
+                    </div>
+                </div>
+            </template>
+           
+                 <div class="slds-grid slds-wrap">
+
+                    <!-- ── CERTIFICATIONS — iterator ──────────────────────
+                            iterator gives access to it.first and it.last
+                            it.value is the actual cert object
+                            First cert = "⭐ Start Here" badge
+                            Last cert  = "🏁 Goal" badge                        -->
+                    <div class="slds-col slds-size_1-of-3">
+                         <div class="slds-box slds-var-m-bottom_medium">
+                            <p class="slds-text-heading_small slds-var-m-bottom_small">
+                                📜 Certifications Roadmap
+                            </p>
+                            <template iterator:it={currentLevel.certs}>
+                                <div key={it.value.name} class="cert-row">
+
+                        <!-- First cert gets a special badge -->
+                                <!-- <template lwc:if={it.first}>
+                                    <span class="slds-badge cert-badge-start">⭐ Start Here</span>
+                                </template> -->
+
+                                <p class="cert-name">{it.value.name}</p>
+                                <p class="cert-note">{it.value.note}</p>
+
+                        <!-- Last cert gets a goal badge -->
+                                <!-- <template lwc:if={it.last}>
+                                    <span class="slds-badge cert-badge-goal">🏁 Goal</span>
+                                </template> -->
+
+                                </div>
+                            </template>
+                        </div>
+                    </div>                    
+                    <!-- ── SKILLS LIST — for:each ─────────────────────────
+                 Loops through currentLevel.skills array
+                 Each skill = one row. key must be unique            -->
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-box slds-var-m-bottom_medium slds-m-left_xx-small">
+                            <p class="slds-text-heading_small slds-var-m-bottom_small">
+                               🧠 Key Skills to Master
+                            </p>
+                            <template for:each={currentLevel.skills} for:item="skill">
+                                <div key={skill} class="skill-row">
+                                    <span class="skill-dot">●</span>
+                                    <span class="slds-text-body_regular">{skill}</span>
+                                </div>
+                            </template>
+                    </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-3">
+                         <!-- ── INTERVIEW TIPS — lwc:if show/hide ─────────────
+                            showTips starts false — toggles on button click     -->
+                            <div class="slds-var-m-bottom_small slds-m-left_xx-small">
+                                <lightning-button
+                                    label={tipsLabel}
+                                    icon-name="utility:knowledge_base"
+                                    variant="brand-outline"
+                                    onclick={toggleTips}>
+                                </lightning-button>
+                            </div>
+
+                        <template lwc:if={showTips}>
+                            <div class="tips-box slds-m-left_xx-small">
+                                <p class="slds-text-heading_small slds-var-m-bottom_small">
+                                    💡 Interview Tips for this Level
+                                </p>
+                                <template for:each={currentLevel.tips} for:item="tip">
+                                    <div key={tip} class="tip-row">
+                                        <span class="tip-icon">→</span>
+                                        <span class="slds-text-body_regular">{tip}</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                 </div>
+
+           
+
+        </div>
+    </lightning-card>
+</template>

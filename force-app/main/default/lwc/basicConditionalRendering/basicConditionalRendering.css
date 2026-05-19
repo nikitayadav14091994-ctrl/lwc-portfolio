@@ -1,0 +1,106 @@
+/* ── LEVEL BANNERS ──────────────────────────────────────────── */
+.level-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 5px 18px;
+    border-radius: 10px;
+    border-left: 6px solid;
+    margin-bottom: 4px;
+}
+
+.banner-beginner  { background: #ecfdf5; border-color: #10b981; }
+.banner-developer { background: #eff6ff; border-color: #3b82f6; }
+.banner-senior    { background: #fffbeb; border-color: #f59e0b; }
+.banner-architect { background: #fdf4ff; border-color: #a855f7; }
+
+.level-emoji { font-size: 2.2rem; }
+
+.level-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+
+.level-meta {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* ── SKILLS LIST ────────────────────────────────────────────── */
+.skill-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 0.5px solid #f1f5f9;
+}
+
+.skill-row:last-child { border-bottom: none; }
+
+.skill-dot {
+    color: #3b82f6;
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* ── CERTIFICATIONS ─────────────────────────────────────────── */
+.cert-row {
+    padding: 10px 0;
+    border-bottom: 0.5px solid #f1f5f9;
+}
+
+.cert-row:last-child { border-bottom: none; }
+
+.cert-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1e293b;
+    margin: 4px 0 2px;
+}
+
+.cert-note {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.cert-badge-start {
+    background-color: #10b981 !important;
+    color: white !important;
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+.cert-badge-goal {
+    background-color: #8b5cf6 !important;
+    color: white !important;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* ── INTERVIEW TIPS ─────────────────────────────────────────── */
+.tips-box {
+    background: #fffbeb;
+    border: 0.5px solid #f59e0b;
+    border-radius: 8px;
+    padding: 14px;
+}
+
+.tip-row {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 0.85rem;
+    color: #374151;
+    border-bottom: 0.5px solid #fef3c7;
+}
+
+.tip-row:last-child { border-bottom: none; }
+
+.tip-icon {
+    color: #f59e0b;
+    font-weight: 700;
+    flex-shrink: 0;
+}
