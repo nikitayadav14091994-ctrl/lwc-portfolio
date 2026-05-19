@@ -1,0 +1,70 @@
+/* ── HOOK STATUS CARDS ──────────────────────────────────────── */
+.hook-card {
+    border-radius: 8px;
+    min-height: 90px;
+    text-align: center;
+    transition: all 0.4s ease;   /* smooth colour change when hook fires */
+}
+
+/* Default grey — hook not fired yet */
+.card-waiting {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    opacity: 0.6;
+}
+
+/* Active state — hook has fired */
+.card-fired {
+    opacity: 1;
+    border-width: 2px;
+    border-style: solid;
+}
+
+/* Individual hook colours */
+.card-blue   { border-color: #3b82f6; background: #eff6ff; }
+.card-green  { border-color: #10b981; background: #ecfdf5; }
+.card-orange { border-color: #f59e0b; background: #fffbeb; }
+.card-purple { border-color: #8b5cf6; background: #f5f3ff; }
+
+/* Hook name styling inside each card */
+.hook-name {
+    font-family: monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    word-break: break-word;
+}
+
+.hook-desc {
+    font-size: 0.72rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+/* ── LOG BADGE COLOURS ──────────────────────────────────────── */
+/* !important needed to override SLDS default badge colour      */
+.badge-blue   { background-color: #3b82f6 !important; color: white !important; }
+.badge-green  { background-color: #10b981 !important; color: white !important; }
+.badge-orange { background-color: #f59e0b !important; color: white !important; }
+.badge-purple { background-color: #8b5cf6 !important; color: white !important; }
+.badge-grey   { background-color: #9ca3af !important; color: white !important; }
+
+/* ── LOG ROWS ───────────────────────────────────────────────── */
+.log-row {
+    padding: 5px 0;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+/* Render count badge — slightly bigger than default */
+.render-count {
+    font-size: 0.95rem !important;
+    padding: 4px 14px !important;
+}
+
+.timer-display {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #10b981;
+    font-family: monospace;
+}

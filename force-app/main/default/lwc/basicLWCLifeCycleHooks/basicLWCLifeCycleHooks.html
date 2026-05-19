@@ -1,0 +1,203 @@
+<template>
+    <lightning-card title="Lifecycle Hooks Live Demo"
+                    icon-name="standard:process">
+        <div class="slds-var-m-around_medium">
+
+            <!-- ── SECTION 1: HOOK STATUS CARDS ───────────────────
+                 slds-grid       = flex row container
+                 slds-wrap       = allows cards to wrap to next line
+                 slds-gutters    = adds gap between columns
+                 slds-size_1-of-2 = each card takes half the width   -->
+            <p class="slds-text-heading_small slds-var-m-bottom_small">
+                Hook Status
+            </p>
+
+            <div class="slds-grid slds-wrap slds-gutters_small
+                        slds-var-m-bottom_medium">
+
+                <!-- Constructor Card -->
+                <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                    <div class={constructorCardClass}>
+                        <p class="hook-name">constructor()</p>
+                        <p class="hook-desc">Component created</p>
+                        <template lwc:if={constructorFired}>
+                            <span class="slds-badge slds-theme_success">✓ Fired</span>
+                        </template>
+                        <template lwc:else>
+                            <span class="slds-badge">Waiting...</span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- connectedCallback Card -->
+                <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                    <div class={connectedCardClass}>
+                        <p class="hook-name">connectedCallback()</p>
+                        <p class="hook-desc">Added to DOM</p>
+                        <template lwc:if={connectedFired}>
+                            <span class="slds-badge slds-theme_success">✓ Fired</span>
+                        </template>
+                        <template lwc:else>
+                            <span class="slds-badge">Waiting...</span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- renderedCallback Card -->
+                <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                    <div class={renderedCardClass}>
+                        <p class="hook-name">renderedCallback()</p>
+                        <p class="hook-desc">After every render</p>
+                        <template lwc:if={renderedFired}>
+                            <span class="slds-badge slds-theme_success">
+                                ✓ Fired {renderCount}x
+                            </span>
+                        </template>
+                        <template lwc:else>
+                            <span class="slds-badge">Waiting...</span>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- disconnectedCallback Card -->
+                <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                    <div class={disconnectedCardClass}>
+                        <p class="hook-name">disconnectedCallback()</p>
+                        <p class="hook-desc">Removed from DOM</p>
+                        <template lwc:if={disconnectedFired}>
+                            <span class="slds-badge slds-theme_success">✓ Fired</span>
+                        </template>
+                        <template lwc:else>
+                            <span class="slds-badge">Waiting...</span>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── SECTION 2: RENDER COUNTER ──────────────────────
+                 slds-grid_align-spread = pushes items to opposite ends -->
+            <div class="slds-grid slds-grid_align-spread
+                        slds-var-m-bottom_medium">
+                <span class="slds-text-body_regular">Total Renders</span>
+                <span class="slds-badge slds-theme_success render-count">
+                    {renderCount}
+                </span>
+            </div>
+
+            <!-- ── SECTION 3: ACTION BUTTONS ──────────────────────-->
+            <div class="slds-grid slds-gutters_small slds-var-m-bottom_medium">
+                <div class="slds-col">
+                    <lightning-button
+                        label="Trigger Re-render"
+                        icon-name="utility:refresh"
+                        variant="brand"
+                        onclick={triggerRerender}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button
+                        label="Reset All"
+                        icon-name="utility:delete"
+                        variant="destructive-text"
+                        onclick={resetAll}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- ── SECTION 4: LIVE LOG ─────────────────────────────
+                 slds-box         = border + padding box
+                 slds-theme_shade = light grey background
+                 for:each loops through hookLog array
+                 key={log.id} is mandatory on for:each — uniquely
+                 identifies each row so LWC can update efficiently  -->
+            <div class="slds-box slds-theme_shade">
+                <p class="slds-text-heading_small slds-var-m-bottom_small">
+                    Live Hook Log
+                </p>
+
+                <template lwc:if={hasLogs}>
+                    <template for:each={hookLog} for:item="log">
+                        <div key={log.id} class="log-row">
+                            <span class={log.badgeClass}>{log.hookName}</span>
+                            <span class="slds-text-body_small
+                                         slds-var-m-left_small">
+                                {log.message}
+                            </span>
+                            <span class="slds-text-color_weak
+                                         slds-text-body_small
+                                         slds-var-m-left_small">
+                                @ {log.time}
+                            </span>
+                        </div>
+                    </template>
+                </template>
+
+                <template lwc:else>
+                    <p class="slds-text-color_weak slds-text-body_small">
+                        Hooks will appear here as they fire...
+                    </p>
+                </template>
+
+            </div>
+
+            <!-- ── SECTION 5: disconnectedCallback DEMO ──────────── -->
+<div class="slds-box slds-var-m-top_medium">
+
+    <p class="slds-text-heading_small slds-var-m-bottom_x-small">
+        disconnectedCallback() — Live Timer Demo
+    </p>
+    <p class="slds-text-body_small slds-text-color_weak slds-var-m-bottom_small">
+        connectedCallback starts this timer. disconnectedCallback stops it.
+        This is the most common real-world use of disconnectedCallback — cleanup.
+    </p>
+
+    <!-- Timer display -->
+    <div class="slds-grid slds-grid_align-spread slds-var-m-bottom_small">
+        <div>
+            <p class="slds-text-body_small slds-text-color_weak">
+                Timer ticks since connected:
+            </p>
+            <p class="timer-display">{timerTick}s</p>
+        </div>
+        <div>
+
+            <template lwc:if={isTimerRunning}>
+                <span class="slds-badge slds-theme_success">● Timer Running</span>
+            </template>
+            <template lwc:else>
+                <span class="slds-badge slds-theme_error">■ Timer Stopped</span>
+            </template>
+        </div>
+    </div>
+
+    <!-- Toggle button -->
+    <lightning-button
+        label={timerButtonLabel}
+        variant={timerButtonVariant}
+        icon-name={timerButtonIcon}
+        onclick={handleTimerToggle}>
+    </lightning-button>
+
+</div>
+
+<!-- ── SECTION 6: errorCallback INFO ─────────────────── -->
+<div class="slds-box slds-theme_shade slds-var-m-top_medium">
+
+    <p class="slds-text-heading_small slds-var-m-bottom_x-small">
+        errorCallback() — Coming in Intermediate Level
+    </p>
+    <p class="slds-text-body_small slds-text-color_weak">
+        errorCallback requires a parent-child component setup to demonstrate —
+        it catches errors thrown by child components.
+        We will fully build this in the <strong>interParentChild</strong> component.
+    </p>
+    <div class="slds-var-m-top_small">
+        <span class="slds-badge slds-theme_warning">Intermediate Level</span>
+    </div>
+
+</div>
+
+        </div>
+    </lightning-card>
+</template>
