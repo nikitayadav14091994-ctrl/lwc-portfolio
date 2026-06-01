@@ -1,0 +1,178 @@
+<template>
+    <lightning-card title="Salesforce Field Validator"
+                    icon-name="standard:field_service_settings">
+        <div class="slds-var-m-around_medium">
+
+            <p class="slds-text-body_small slds-text-color_weak slds-var-m-bottom_medium">
+                Type in any field — watch events fire live in the log below.
+                Press <strong>Enter</strong> to save · <strong>Esc</strong> to clear.
+            </p>
+
+            <!-- Hint box — shows on onfocus, hides on onblur -->
+            <template lwc:if={activeHint}>
+                <div class="hint-box slds-var-m-bottom_small">
+                    💡 {activeHint}
+                </div>
+            </template>
+            <template lwc:else>
+                <div class="hint-placeholder slds-var-m-bottom_small">
+                    Click any field to see a hint here
+                </div>
+            </template>
+
+            <!-- Field Label -->
+            <div class="slds-var-m-bottom_small">
+                <lightning-input
+                    label="Field Label"
+                    placeholder="e.g. Account Manager"
+                    value={fieldLabel}
+                    data-field="Field Label"
+                    data-hint="This is what users see on the page. Max 40 characters."
+                    oninput={handleLabelInput}
+                    onfocus={handleFocus}
+                    onblur={handleBlur}
+                    onkeydown={handleKeyDown}>
+                </lightning-input>
+                <div class="slds-grid slds-grid_align-spread">
+                    <template lwc:if={labelError}>
+                        <span class="error-text">{labelError}</span>
+                    </template>
+                    <template lwc:else>
+                        <span></span>
+                    </template>
+                    <span class="count-text">{labelCount}</span>
+                </div>
+            </div>
+
+            <!-- API Name -->
+            <div class="slds-var-m-bottom_small">
+                <lightning-input
+                    label="API Name"
+                    placeholder="e.g. Account_Manager"
+                    value={fieldApiName}
+                    data-field="API Name"
+                    data-hint="Auto-generated from Label. Letters, numbers and underscores only."
+                    oninput={handleApiNameInput}
+                    onfocus={handleFocus}
+                    onblur={handleBlur}
+                    onkeydown={handleKeyDown}>
+                </lightning-input>
+                <div class="slds-grid slds-grid_align-spread">
+                    <template lwc:if={apiNameError}>
+                        <span class="error-text">{apiNameError}</span>
+                    </template>
+                    <template lwc:else>
+                        <span></span>
+                    </template>
+                    <span class="count-text">{apiNameCount}</span>
+                </div>
+                <template lwc:if={fieldApiName}>
+                    <p class="api-preview">
+                        Full API Name: <strong>{fieldApiName}__c</strong>
+                    </p>
+                </template>
+                <template lwc:else>
+                    <p class="api-preview-empty">
+                        API name will appear here
+                    </p>
+                </template>
+            </div>
+
+            <!-- Description -->
+            <div class="slds-var-m-bottom_medium">
+                <lightning-textarea
+                    label="Description (optional)"
+                    placeholder="What is this field used for?"
+                    value={fieldDescription}
+                    data-field="Description"
+                    data-hint="Optional. Helps team members understand the purpose. Max 255 characters."
+                    oninput={handleDescriptionInput}
+                    onfocus={handleFocus}
+                    onblur={handleBlur}>
+                </lightning-textarea>
+                <div class="slds-grid slds-grid_align-spread">
+                    <template lwc:if={descriptionError}>
+                        <span class="error-text">{descriptionError}</span>
+                    </template>
+                    <template lwc:else>
+                        <span></span>
+                    </template>
+                    <span class="count-text">{descriptionCount}</span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="slds-grid slds-gutters_small slds-var-m-bottom_medium">
+                <div class="slds-col">
+                    <lightning-button
+                        label="Save Field"
+                        variant={saveButtonVariant}
+                        icon-name="utility:save"
+                        onclick={handleSave}>
+                    </lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button
+                        label="Clear All"
+                        variant="neutral"
+                        icon-name="utility:clear"
+                        onclick={handleClear}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Saved result — shows when isSaved = true -->
+            <template lwc:if={isSaved}>
+                <div class="saved-box slds-var-m-bottom_medium">
+                    <p class="slds-text-heading_small slds-var-m-bottom_small">
+                        ✅ Field Ready to Deploy
+                    </p>
+                    <div class="saved-row">
+                        <span class="saved-key">Label</span>
+                        <span class="saved-val">{savedField.label}</span>
+                    </div>
+                    <div class="saved-row">
+                        <span class="saved-key">API Name</span>
+                        <span class="saved-val api-name">{savedField.apiName}</span>
+                    </div>
+                    <div class="saved-row">
+                        <span class="saved-key">Description</span>
+                        <span class="saved-val">{savedField.description}</span>
+                    </div>
+                </div>
+            </template>
+            <template lwc:else>
+                <div class="empty-save-box slds-var-m-bottom_medium">
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        Fill the form above and click Save Field to see the result here.
+                    </p>
+                </div>
+            </template>
+
+            <!-- Live event log -->
+            <template lwc:if={hasEventLog}>
+                <div class="slds-box event-log-box">
+                    <p class="slds-text-heading_small slds-var-m-bottom_small">
+                        ⚡ Live Event Log
+                    </p>
+                    <template for:each={eventLog} for:item="log">
+                        <div key={log.id} class="event-row">
+                            <span class="event-type-badge">{log.eventType}</span>
+                            <span class="event-target">{log.target}</span>
+                            <span class="event-detail">{log.detail}</span>
+                            <span class="event-time">{log.time}</span>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template lwc:else>
+                <div class="slds-box event-log-empty">
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        ⚡ Event log is empty — start typing to see events fire here.
+                    </p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

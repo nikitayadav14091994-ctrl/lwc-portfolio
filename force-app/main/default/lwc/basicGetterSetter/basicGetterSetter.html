@@ -1,0 +1,122 @@
+<template>
+    <lightning-card title="Apex Governor Limits Health Checker"
+                    icon-name="standard:apex">
+        <div class="slds-var-m-around_medium">
+
+            <p class="slds-text-body_small slds-text-color_weak slds-var-m-bottom_medium">
+                Move the sliders to see getters recompute the score live.
+                Setters ensure values never exceed Salesforce governor limits.
+            </p>
+
+            <!-- ── SOQL SLIDER ───────────────────────────────────── -->
+            <div class="limit-row slds-var-m-bottom_medium">
+                <div class="slds-grid slds-grid_align-spread slds-var-m-bottom_x-small">
+                    <span class="slds-text-heading_small">
+                        SOQL Queries
+                        <span class="limit-max">/ 100 max</span>
+                    </span>
+                    <span class="slds-text-heading_small">{soqlCount} &nbsp;{soqlStatus}</span>
+                </div>
+                <!-- Progress bar — width computed by getter soqlPercent -->
+                <div class="progress-track">
+                    <div class={soqlBarClass} style={soqlBarStyle}></div>
+                </div>
+                <lightning-slider
+                    min="0"
+                    max="100"
+                    step="1"
+                    value={soqlCount}
+                    onchange={handleSoqlChange}>
+                </lightning-slider>
+            </div>
+
+            <!-- ── DML SLIDER ────────────────────────────────────── -->
+            <div class="limit-row slds-var-m-bottom_medium">
+                <div class="slds-grid slds-grid_align-spread slds-var-m-bottom_x-small">
+                    <span class="slds-text-heading_small">
+                        DML Operations
+                        <span class="limit-max">/ 150 max</span>
+                    </span>
+                    <span class="slds-text-heading_small">{dmlCount} &nbsp;{dmlStatus}</span>
+                </div>
+                <div class="progress-track">
+                    <div class={dmlBarClass} style={dmlBarStyle}></div>
+                </div>
+                <lightning-slider
+                    min="0"
+                    max="150"
+                    step="1"
+                    value={dmlCount}
+                    onchange={handleDmlChange}>
+                </lightning-slider>
+            </div>
+
+            <!-- ── CPU TIME SLIDER ───────────────────────────────── -->
+            <!-- <div class="limit-row slds-var-m-bottom_medium">
+                <div class="slds-grid slds-grid_align-spread slds-var-m-bottom_x-small">
+                    <span class="slds-text-heading_small">
+                        CPU Time (ms)
+                        <span class="limit-max">/ 10000ms max</span>
+                    </span>
+                    <span class="slds-text-heading_small">{cpuTime}ms &nbsp;{cpuStatus}</span>
+                </div>
+                <div class="progress-track">
+                    <div class={cpuBarClass} style={cpuBarStyle}></div>
+                </div>
+                <lightning-slider
+                    min="0"
+                    max="10000"
+                    step="100"
+                    value={cpuTime}
+                    onchange={handleCpuChange}>
+                </lightning-slider>
+            </div> -->
+
+            <!-- ── SCORE CARD ─────────────────────────────────────
+                 overallScore and overallGrade are both pure getters
+                 They recompute every time any slider moves          -->
+            <div class="slds-grid slds-gutters_medium slds-var-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-3">
+                    <div class={gradeClass}>
+                        <p class="grade-letter">{overallGrade}</p>
+                        <p class="grade-label">Health Grade</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="score-details slds-box">
+                        <p class="slds-text-heading_small">
+                            Score: {overallScore} / 100
+                        </p>
+                        <p class="slds-text-body_small slds-var-m-top_x-small">
+                            {scoreMessage}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SUGGESTIONS — for:each ─────────────────────────
+                 suggestions is a getter that returns an array
+                 Changes based on slider values automatically        -->
+            <div class="slds-box slds-var-m-bottom_medium">
+                <p class="slds-text-heading_small slds-var-m-bottom_small">
+                    💡 Optimisation Suggestions
+                </p>
+                <template for:each={suggestions} for:item="tip">
+                    <div key={tip} class="tip-row">
+                        <span class="tip-arrow">→</span>
+                        <span class="slds-text-body_small">{tip}</span>
+                    </div>
+                </template>
+            </div>
+
+            <!-- ── RESET BUTTON ──────────────────────────────────── -->
+            <lightning-button
+                label="Reset All"
+                icon-name="utility:refresh"
+                variant="neutral"
+                onclick={handleReset}>
+            </lightning-button>
+
+        </div>
+    </lightning-card>
+</template>

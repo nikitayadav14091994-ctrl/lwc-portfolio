@@ -1,0 +1,85 @@
+/* ── PROGRESS BARS ──────────────────────────────────────────── */
+.progress-track {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.bar-safe    { background-color: #10b981; }
+.bar-warning { background-color: #f59e0b; }
+.bar-danger  { background-color: #ef4444; }
+
+/* ── LIMIT LABELS ───────────────────────────────────────────── */
+.limit-max {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+/* ── GRADE BOX ──────────────────────────────────────────────── */
+.grade-box {
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 2px solid;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.grade-a { background: #ecfdf5; border-color: #10b981; }
+.grade-b { background: #eff6ff; border-color: #3b82f6; }
+.grade-c { background: #fffbeb; border-color: #f59e0b; }
+.grade-d { background: #fff7ed; border-color: #f97316; }
+.grade-f { background: #fef2f2; border-color: #ef4444; }
+
+.grade-letter {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.grade-a .grade-letter { color: #10b981; }
+.grade-b .grade-letter { color: #3b82f6; }
+.grade-c .grade-letter { color: #f59e0b; }
+.grade-d .grade-letter { color: #f97316; }
+.grade-f .grade-letter { color: #ef4444; }
+
+.grade-label {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* ── SCORE DETAILS ──────────────────────────────────────────── */
+.score-details { height: 100%; }
+
+/* ── SUGGESTIONS ────────────────────────────────────────────── */
+.tip-row {
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 0.5px solid #f1f5f9;
+    align-items: flex-start;
+}
+
+.tip-row:last-child { border-bottom: none; }
+
+.tip-arrow {
+    color: #3b82f6;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
